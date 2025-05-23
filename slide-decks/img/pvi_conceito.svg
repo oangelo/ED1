@@ -1,0 +1,41 @@
+<svg width="450" height="350" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="16">
+  <style>
+    .axis { stroke: #555; stroke-width: 2; }
+    .grid { stroke: #ddd; stroke-width: 1; }
+    .curve { fill: none; stroke: #337ab7; stroke-width: 2.5; }
+    .bad-curve { fill: none; stroke: #aaa; stroke-width: 1.5; stroke-dasharray: 4 4;}
+    .point { fill: #d9534f; stroke: #ac2925; stroke-width: 1;}
+    .text { fill: #333; text-anchor: middle; }
+    .label { fill: #555; font-size: 14px;}
+  </style>
+
+  <!-- Grid lines (optional) -->
+  <line class="grid" x1="50" y1="100" x2="400" y2="100"/>
+  <line class="grid" x1="50" y1="150" x2="400" y2="150"/>
+  <line class="grid" x1="50" y1="200" x2="400" y2="200"/>
+  <line class="grid" x1="150" y1="50" x2="150" y2="300"/>
+  <line class="grid" x1="250" y1="50" x2="250" y2="300"/>
+
+  <!-- Axes -->
+  <line class="axis" x1="50" y1="300" x2="400" y2="300" marker-end="url(#arrowhead_axis)"/> <!-- t-axis -->
+  <line class="axis" x1="50" y1="300" x2="50" y2="50" marker-end="url(#arrowhead_axis)"/>   <!-- y-axis -->
+  <text class="label" x="410" y="305">t</text>
+  <text class="label" x="40" y="45">y</text>
+
+  <defs>
+    <marker id="arrowhead_axis" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Random "bad" curves -->
+  <path class="bad-curve" d="M 80 250 Q 150 180, 220 220 T 350 150"/>
+  <path class="bad-curve" d="M 100 80 Q 200 150, 250 100 T 380 120"/>
+
+  <!-- "Good" solution curve passing through (t0, y0) -->
+  <path class="curve" d="M 70 280 Q 150 200, 200 150 T 360 70"/>
+
+  <!-- Point (t0, y0) -->
+  <circle class="point" cx="200" cy="150" r="6"/>
+  <text class="text" x="220" y="145">$(t_0, y_0)$</text>
+</svg>

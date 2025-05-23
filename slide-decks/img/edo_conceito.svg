@@ -1,0 +1,20 @@
+<svg width="500" height="200" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="18">
+  <style>
+    .box { fill: #eef; stroke: #337ab7; stroke-width: 2; rx: 5; ry: 5; }
+    .arrow { stroke: #333; stroke-width: 2.5; marker-end: url(#arrowhead); }
+    .text { fill: #333; text-anchor: middle; dominant-baseline: middle; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+  </defs>
+
+  <rect class="box" x="50" y="75" width="180" height="50"/>
+  <text class="text" x="140" y="100">EDO: $y' = f(t,y)$</text>
+
+  <line class="arrow" x1="240" y1="100" x2="300" y2="100"/>
+
+  <rect class="box" x="310" y="75" width="140" height="50"/>
+  <text class="text" x="380" y="100">Solução: $y(t)$</text>
+</svg>

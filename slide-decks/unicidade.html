@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Desvendando EDOs: Existência e Unicidade</title>
+
+		<!-- Core CSS do Reveal.js via CDN -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+
+		<!-- Tema do Reveal.js (Sky) via CDN -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/sky.css" id="theme">
+
+		<!-- Tema para realce de sintaxe de código via CDN -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+
+		<style>
+            .reveal { font-size: 28px; }
+            .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 { text-transform: none; }
+            .reveal h1 { font-size: 2.2em; }
+            .reveal h2 { font-size: 1.6em; }
+            .reveal h3 { font-size: 1.3em; }
+            .reveal p, .reveal li, .reveal div { font-size: 0.9em; }
+			.reveal .slides section img.plain { background: none; border: none; box-shadow: none; }
+			.small-text { font-size: 0.75em; }
+			.medium-text { font-size: 0.9em; }
+			.left-align { text-align: left; }
+            .center-align { text-align: center; }
+			.reveal .slides section .fragment.current-only { opacity: 1; visibility: visible; display: inherit; }
+			.reveal .slides section .fragment.current-only.visible { display: inherit; }
+			.reveal .slides section .fragment.current-only:not(.visible) { display: none; }
+            .mjx-chtml { text-align: center !important; } /* Para centralizar display math */
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- PARTE 1: O QUE É UMA EDO E POR QUE PRECISAMOS DE GARANTIAS? -->
+				<section>
+					<section>
+						<h2>Equações Diferenciais Ordinárias (EDOs)</h2>
+						<p class="fragment">Uma equação envolvendo uma função desconhecida $y(t)$ e suas derivadas.</p>
+						<ul class="fragment">
+							<li>Notação: $y^{\prime} = \frac{dy}{dt}$, $y^{\prime\prime} = \frac{d^2y}{dt^2}$, etc.</li>
+							<li>Buscamos a função $y(t)$ que satisfaz a equação.</li>
+						</ul>
+                        <p class="fragment"><strong>Exemplos de 1ª Ordem:</strong></p>
+						<ul class="fragment">
+							<li>Crescimento/Decaimento: $y^{\prime} = ky$</li>
+							<li>Resfriamento de Newton: $\frac{dT}{dt} = -k(T - T_{amb})$</li>
+						</ul>
+					</section>
+					<section data-background-color="#f8f8f8">
+						<h3>Da Equação à Função</h3>
+                        <img src="img/edo_conceito.svg" alt="Conceito de EDO" class="plain" style="max-height: 400px; margin-top: 20px;">
+                        <p class="small-text" style="margin-top:10px;">(SVG: Caixa "EDO: $y^{\prime} = f(t,y)$" $\longrightarrow$ Caixa "Solução: $y(t)$")</p>
+					</section>
+				</section>
+
+                <section>
+                    <section>
+                        <h2>O Problema de Valor Inicial (PVI)</h2>
+                        <p class="fragment">Uma EDO acompanhada de uma condição inicial.</p>
+                        <p class="fragment"><strong>Forma Geral (1ª ordem):</strong>
+                            $$ \begin{cases} y^{\prime} = f(t,y) \\ y(t_0) = y_0 \end{cases} $$
+                        </p>
+                        <p class="fragment">A condição $y(t_0) = y_0$ especifica um ponto $(t_0, y_0)$ pela qual a solução deve passar.</p>
+                        <p class="fragment"><strong>Perguntas Fundamentais:</strong></p>
+						<ol>
+							<li class="fragment"><strong>Existência:</strong> Sempre <em>existe</em> uma solução $y(t)$ para um PVI?</li>
+							<li class="fragment"><strong>Unicidade:</strong> Se existir, ela é <em>única</em>?</li>
+							<li class="fragment"><strong>Regularidade:</strong> Como essa solução se <em>comporta</em>?</li>
+						</ol>
+                    </section>
+                    <section data-background-color="#f8f8f8">
+                        <h3>Ponto de Partida</h3>
+                        <img src="img/pvi_conceito.svg" alt="Conceito de PVI" class="plain" style="max-height: 450px; margin-top: 20px;">
+                        <p class="small-text" style="margin-top:10px;">(SVG: Plano $(t, y)$, ponto $(t_0, y_0)$, curva passando por ele)</p>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>O Campo de Direções</h2>
+                    <p class="fragment">A EDO $y^{\prime} = f(t,y)$ define a <strong>inclinação</strong> $m = f(t,y)$ da solução em cada ponto $(t,y)$.</p>
+                    <p class="fragment"><strong>Construção:</strong> Em cada ponto $(t,y)$, desenhamos um segmento com inclinação $f(t,y)$.</p>
+                    <p class="fragment"><strong>Solução:</strong> Curva $y(t)$ tangente aos segmentos do campo.</p>
+                    <hr>
+                    <p class="fragment"><strong>Visualização (Notebook):</strong><br>
+                        <span class="medium-text">Plots 1 e 2 (para $y^{\prime}=y$ e $y^{\prime}=t$).</span></p>
+                    <p class="fragment"><strong>Exercício:</strong>
+                        <ul class="medium-text">
+                            <li>Esboce o campo para $y^{\prime} = 1$. Soluções?</li>
+                            <li>E para $y^{\prime} = -t/y$?</li>
+                        </ul>
+                    </p>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Cenários Problemáticos: Não Existência</h2>
+                        <p class="fragment">E se $f(t,y)$ não for "bem comportada"?</p>
+                        <p class="fragment"><strong>Exemplo:</strong> PVI
+                            $$ \begin{cases} y^{\prime} = \frac{1}{t} \\ y(0) = 1 \end{cases} $$
+                        </p>
+                        <p class="fragment">$f(t,y) = \frac{1}{t}$ não é contínua em $t=0$. Inclinação "infinita".</p>
+                        <p class="fragment">Não é possível $y(t)$ diferenciável satisfazer $y(0)=1$ e a EDO.</p>
+                        <p class="fragment"><strong>Conclusão:</strong> Continuidade de $f(t,y)$ parece essencial.</p>
+                    </section>
+                    <section data-background-color="#f8f8f8">
+                        <h3>Descontinuidade em $f(t,y)$</h3>
+                        <img src="img/descontinuidade_1_sobre_t.svg" alt="Descontinuidade de 1/t" class="plain" style="max-height: 450px; margin-top: 20px;">
+                        <p class="small-text" style="margin-top:10px;">(SVG: Gráfico de $y = 1/t$, com assíntota em $t=0$)</p>
+                    </section>
+                </section>
+
+                <section>
+                     <h2>Cenários Problemáticos: Não Unicidade</h2>
+                     <p class="fragment"><strong>Exemplo Clássico:</strong> PVI $\begin{cases} y^{\prime} = \sqrt{|y|} \\ y(0) = 0 \end{cases}$</p>
+                     <p class="fragment"><strong>Solução 1:</strong> $y_1(t) = 0$.
+                        <span class="small-text">(Verificação: $y_1^{\prime}(t) = 0$, $\sqrt{|y_1(t)|} = 0$)</span></p>
+                     <p class="fragment"><strong>Solução 2:</strong> $y_2(t) = \begin{cases} (t/2)^2 & t \ge 0 \\ 0 & t < 0 \end{cases}$</p>
+                     <p class="fragment">(Outra: $y_3(t) = t|t|/4$).</p>
+                     <hr>
+                     <p class="fragment"><strong>Visualização (Notebook):</strong><br>
+                        <span class="medium-text">Plot 3: múltiplas soluções por $(0,0)$.</span></p>
+                     <p class="fragment"><strong>Questão:</strong> $f(t,y) = \sqrt{|y|}$ é contínua em $(0,0)$. O que falta para unicidade?</p>
+                </section>
+
+                <!-- PARTE 2: O TEOREMA DE PICARD-LINDELÖF -->
+                <section>
+                    <h2>Condições Cruciais para $f(t,y)$</h2>
+                    <p class="medium-text">Teorema de Picard-Lindelöf</p>
+                    <p class="fragment medium-text">Para o PVI $\begin{cases} y^{\prime} = f(t,y) \\ y(t_0) = y_0 \end{cases}$, $f(t,y)$ em $R = \{(t,y) : |t-t_0| \le a, |y-y_0| \le b\}$, deve satisfazer:</p>
+                    <ol>
+                        <li class="fragment"><strong>Continuidade de $f(t,y)$ em $R$.</strong>
+                            <ul class="small-text"><li>Associada à <em>EXISTÊNCIA</em>.</li></ul>
+                        </li>
+                        <li class="fragment"><strong>Condição de Lipschitz em $y$ em $R$:</strong>
+                            <ul class="small-text">
+                                <li>$\exists L > 0 : |f(t, y_1) - f(t, y_2)| \le L |y_1 - y_2|$.</li>
+                                <li>Associada à <em>UNICIDADE</em>.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2>Desmistificando a Condição de Lipschitz</h2>
+                    <p class="fragment"><strong>Interpretação:</strong> $\frac{|f(t, y_1) - f(t, y_2)|}{|y_1 - y_2|} \le L$.
+                        <ul class="small-text"><li>Taxa de variação de $f$ em $y$ é limitada.</li></ul>
+                    <p class="fragment"><strong>Critério Prático (Suficiente):</strong>
+                        <ul class="small-text"><li>Se $\frac{\partial f}{\partial y}$ existe e é <strong>contínua</strong> (logo, limitada) em $R$ (fechado, limitado), $f$ é Lipschitz em $y$.</li></ul>
+                    <p class="fragment"><strong>Revisitando $y^{\prime} = \sqrt{|y|}$</strong>:
+                        <ul class="small-text">
+                            <li>$f(t,y) = \sqrt{|y|}$. Para $y \neq 0$, $\frac{\partial f}{\partial y} = \frac{1}{2\sqrt{|y|}} \text{sgn}(y)$.</li>
+                            <li>$y \to 0 \implies |\frac{\partial f}{\partial y}| \to \infty$. Não limitada.</li>
+                            <li><strong>Conclusão:</strong> $f(t,y) = \sqrt{|y|}$ NÃO é Lipschitz em $y$ perto de $y=0$.</li>
+                        </ul>
+                </section>
+
+                <section>
+                    <h2>O Enunciado do Teorema (Picard-Lindelöf)</h2>
+                    <div class="left-align medium-text">
+                    <p class="fragment"><strong>Hipóteses:</strong> Seja $f(t,y)$ tal que:</p>
+                    <ol class="fragment">
+                        <li>$f(t,y)$ é <strong>contínua</strong> em $R = [t_0-a, t_0+a] \times [y_0-b, y_0+b]$.</li>
+                        <li>$f(t,y)$ satisfaz <strong>Lipschitz</strong> em $y$ em $R$ (constante $L$).</li>
+                    </ol>
+                    <p class="fragment"><strong>Tese:</strong> Então, existe $h > 0$ tal que o PVI
+                        $$ \begin{cases} y^{\prime} = f(t,y) \\ y(t_0) = y_0 \end{cases} $$
+                        possui <strong>solução única</strong> $y(t)$ em $[t_0-h, t_0+h]$.
+                    </p>
+                    <p class="fragment"><strong>Regularidade:</strong>
+                        <span class="small-text">Se $f \in C^k(R) \implies y(t) \in C^{k+1}([t_0-h, t_0+h])$.</span>
+                    </p>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Implicações e Limitações</h2>
+                    <p class="fragment"><strong>Garantias Principais:</strong> EXISTÊNCIA, UNICIDADE, REGULARIDADE (LOCAIS).</p>
+                    <p class="fragment"><strong>Natureza Local!</strong> Não garante solução para todo $t$.</p>
+                    <p class="fragment">Ex. "Blow-up": $y^{\prime} = y^2, y(0)=1 \implies y(t) = \frac{1}{1-t}$.
+                        <span class="small-text">($f(y)=y^2$ é $C^\infty$, Lipschitz local. Solução "explode" em $t=1$).</span>
+                    </p>
+                    <p class="fragment"><strong>Visualização (Notebook):</strong> <span class="medium-text">Plot 4 (Blow-up).</span></p>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Construindo a Solução: Ponto de Partida</h2>
+                        <p class="medium-text">A prova é construtiva!</p>
+                        <p class="fragment"><strong>Passo 1:</strong> PVI $\begin{cases} y^{\prime} = f(t,y) \\ y(t_0) = y_0 \end{cases} \iff$ Equação Integral.</p>
+                        <p class="fragment">Integrando $y^{\prime}(s) = f(s, y(s))$ de $t_0$ a $t$:
+                            $$ y(t) = y_0 + \int_{t_0}^t f(s, y(s))ds $$
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Construindo a Solução: Aproximações Sucessivas</h2>
+                        <p class="fragment"><strong>Passo 2:</strong> Iterações de Picard $\{\phi_k(t)\}$:</p>
+                        <ul class="medium-text">
+                            <li class="fragment">$\phi_0(t) = y_0$</li>
+                            <li class="fragment">$\phi_1(t) = y_0 + \int_{t_0}^t f(s, \phi_0(s))ds$</li>
+                            <li class="fragment">$\phi_{k+1}(t) = y_0 + \int_{t_0}^t f(s, \phi_k(s))ds$</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Construindo a Solução: A Convergência</h2>
+                        <p class="fragment"><strong>Convergência:</strong> $\{\phi_k(t)\}$ converge uniformemente para $y(t)$ (única solução) em $[t_0-h, t_0+h]$.</p>
+                        <p class="fragment"><strong>Visualização (Notebook):</strong> <span class="medium-text">Plot 5 ($y^{\prime}=y, y(0)=1 \to e^t$).</span></p>
+                    </section>
+                </section>
+
+				<!-- PARTE 3: GENERALIZANDO O TEOREMA -->
+                <section>
+                    <section>
+                        <h2>EDOs de Ordem $n$ e Sistemas de 1ª Ordem</h2>
+                        <p class="fragment"><strong>Estratégia:</strong> Reduzir EDO de ordem $n$ a sistema de $n$ EDOs de 1ª ordem.</p>
+                        <p class="fragment"><strong>Ex (EDO 2ª Ordem):</strong> $y^{\prime\prime} = G(t, y, y^{\prime})$; $y(t_0)=y_0, y^{\prime}(t_0)=v_0$.</p>
+                            <ul class="fragment medium-text">
+                                <li>$x_1(t) = y(t)$, $x_2(t) = y^{\prime}(t)$.</li>
+                                <li>Sistema: $\begin{cases} x_1^{\prime} = x_2 \\ x_2^{\prime} = G(t, x_1, x_2) \end{cases}$, com $x_1(t_0)=y_0, x_2(t_0)=v_0$.</li>
+                            </ul>
+                    </section>
+                    <section data-background-color="#f8f8f8">
+                        <h3>Reduzindo a Ordem</h3>
+                        <img src="img/reducao_ordem.svg" alt="Redução de Ordem" class="plain" style="max-height: 450px; margin-top: 20px;">
+                        <p class="small-text" style="margin-top:10px;">(SVG: "EDO Ordem n" $\rightarrow$ "Sistema n EDOs 1ª Ordem")</p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Teorema para Sistemas: O Problema</h2>
+                        <p class="fragment">Sistema: $y_i^{\prime} = f_i(t, y_1, \dots, y_n)$, $i=1,\dots,n$.</p>
+                        <p class="fragment">Vetorial: $\mathbf{Y}(t) = (y_1, \dots, y_n)^T$, $\mathbf{F}(t, \mathbf{Y}) = (f_1, \dots, f_n)^T$.</p>
+                        <p class="fragment">PVI: $\begin{cases} \mathbf{Y}^{\prime} = \mathbf{F}(t, \mathbf{Y}) \\ \mathbf{Y}(t_0) = \mathbf{Y}_0 \end{cases}$.</p>
+                    </section>
+                    <section>
+                        <h2>Teorema para Sistemas: Garantias</h2>
+                        <p class="fragment"><strong>Condições Análogas:</strong></p>
+                        <ol class="medium-text">
+                            <li class="fragment">$\mathbf{F}(t, \mathbf{Y})$ <strong>contínua</strong>.</li>
+                            <li class="fragment">$\mathbf{F}(t, \mathbf{Y})$ <strong>Lipschitz em $\mathbf{Y}$</strong>.
+                                <ul class="small-text"><li>Critério: $\frac{\partial f_i}{\partial y_j}$ contínuas e limitadas.</li></ul>
+                            </li>
+                        </ol>
+                        <p class="fragment"><strong>Conclusão:</strong> Se ok, existe $h>0$ com <strong>solução vetorial única</strong> $\mathbf{Y}(t)$ em $[t_0-h, t_0+h]$.</p>
+                        <p class="fragment">Fundamenta EDOs de ordem superior!</p>
+                    </section>
+                </section>
+
+				<!-- PARTE 4: POR QUE ESTE TEOREMA É FUNDAMENTAL? -->
+                <section>
+                    <section>
+                        <h2>Por que este Teorema é Fundamental? (1/3)</h2>
+                        <h3>Validação de Modelos Matemáticos</h3>
+                        <ul class="medium-text">
+                            <li class="fragment">Fenômenos (física, etc.) são descritos por EDOs.</li>
+                            <li class="fragment">Se funções do modelo ok $\implies$ modelo <strong>bem posto</strong>.</li>
+                            <li class="fragment">Cond. inicial $\implies$ única trajetória futura (local). Dá confiança!</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Por que este Teorema é Fundamental? (2/3)</h2>
+                        <h3>Fundamento para Métodos Numéricos</h3>
+                        <ul class="medium-text">
+                            <li class="fragment">Maioria das EDOs práticas <strong>não tem soluções analíticas</strong>.</li>
+                            <li class="fragment">Precisamos de <strong>métodos numéricos</strong> (Euler, RK).</li>
+                            <li class="fragment">Teorema garante <strong>única solução</strong> que métodos buscam.</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Por que este Teorema é Fundamental? (3/3)</h2>
+                        <h3>Base para Análise Qualitativa</h3>
+                        <ul class="medium-text">
+                            <li class="fragment">Interessa o <em>comportamento</em> da solução:
+                                <ul class="small-text"><li>Crescimento? Equilíbrio? Estabilidade?</li></ul>
+                            </li>
+                            <li class="fragment">Teorema assegura trajetórias bem definidas e que não se cruzam (unicidade), vital para análise.</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>Recapitulando o Essencial</h2>
+                    <ul>
+                        <li class="fragment"><strong>PVI:</strong> EDO + Cond. Inicial.</li>
+                        <li class="fragment"><strong>Cond. Picard-Lindelöf:</strong> Cont. de $f$ e Lipschitz de $f$ em $y$.</li>
+                        <li class="fragment"><strong>Garantias (Locais):</strong> EXISTÊNCIA, UNICIDADE, REGULARIDADE.</li>
+                        <li class="fragment"><strong>Generalização:</strong> EDOs de ordem $n \to$ sistemas.</li>
+                        <li class="fragment"><strong>Impacto:</strong> Essencial para teoria, modelagem, numéricos.</li>
+                    </ul>
+                    <p class="fragment" style="margin-top: 20px;">O "certificado de garantia" das EDOs!</p>
+                </section>
+
+                <section>
+                    <h2>Dúvidas e Continuação...</h2>
+                    <p style="margin-top: 30px;" class="center-align">Perguntas?</p>
+                    <hr>
+                    <p class="fragment"><strong>Na sequência do curso:</strong></p>
+                    <ul class="fragment medium-text">
+                        <li>Técnicas analíticas para classes específicas de EDOs.</li>
+                        <li>Introdução a métodos numéricos.</li>
+                        <li>Estudo qualitativo de sistemas.</li>
+                    </ul>
+                    <p class="fragment" style="margin-top: 40px;" class="center-align">Obrigado!</p>
+                </section>
+			</div>
+		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/markdown/markdown.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/math/math.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+                center: true,
+                margin: 0.05,
+                width: 1100,
+                height: 750,
+                math: {
+                    // As opções de configuração para o plugin MathJax3 são passadas aqui
+                    // O plugin carrega o MathJax automaticamente
+                    tex: {
+                        inlineMath: [['$','$'], ['\\(','\\)']],
+                        displayMath: [['$$','$$'], ['\\[','\\]']],
+                        processEscapes: true,
+                        processEnvironments: true,
+                        packages: {'[+]': ['ams', 'newcommand', 'noerrors']} // Adicionado 'noerrors' para depuração
+                    },
+                    options: {
+                        skipHtmlTags: [ 'script', 'noscript', 'style', 'textarea', 'pre', 'code' ], // Adicionado 'code'
+                        ignoreHtmlClass: 'nostem|noasciimath',
+                        processHtmlClass: 'mathjaxignore|mathjaxprocess'
+                    }
+                },
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.MathJax3 ], // Usar RevealMath.MathJax3
+
+                // Tentar reprocessar após a inicialização e em mudanças de slide
+                // para pegar equações que podem não ter sido processadas inicialmente.
+                // Este é mais um fallback, o plugin deve lidar com isso.
+                autoSlide: 0, // Desabilita o auto-slide se estiver ativo
+                loop: false,
+                // Outras configurações...
+			});
+
+            function doMathJaxRender(event) {
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    // console.log('Forcing MathJax typeset on:', event ? event.type : 'manual'); // Para depuração
+                    window.MathJax.typesetPromise();
+                }
+            }
+
+            Reveal.on('ready', doMathJaxRender);
+            Reveal.on('slidechanged', doMathJaxRender);
+            // Se você tiver conteúdo carregado dinamicamente, chame doMathJaxRender após o carregamento.
+
+		</script>
+	</body>
+</html>

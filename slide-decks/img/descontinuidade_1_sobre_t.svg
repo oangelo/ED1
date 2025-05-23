@@ -1,0 +1,31 @@
+<svg width="400" height="350" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="16">
+  <style>
+    .axis { stroke: #555; stroke-width: 2; }
+    .asymptote { stroke: #d9534f; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .curve { fill: none; stroke: #337ab7; stroke-width: 2.5; }
+    .text { fill: #333; text-anchor: middle; }
+    .label { fill: #555; font-size: 14px;}
+  </style>
+
+  <!-- Axes -->
+  <line class="axis" x1="30" y1="175" x2="370" y2="175" marker-end="url(#arrowhead_des)"/> <!-- t-axis -->
+  <line class="axis" x1="200" y1="320" x2="200" y2="30" marker-end="url(#arrowhead_des)"/>   <!-- y-axis (origin at t=0) -->
+  <text class="label" x="380" y="180">t</text>
+  <text class="label" x="190" y="25">y</text>
+  <text class="label" x="200" y="190">0</text>
+
+  <defs>
+    <marker id="arrowhead_des" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Asymptote at t=0 (the y-axis itself) -->
+  <line class="asymptote" x1="200" y1="30" x2="200" y2="320"/>
+
+  <!-- Curve y = 1/t (simplified representation) -->
+  <path class="curve" d="M 210 35 Q 230 75, 250 100 C 280 140, 350 165, 370 170"/> <!-- Positive t branch -->
+  <path class="curve" d="M 190 315 Q 170 275, 150 250 C 120 210, 50 185, 30 180"/> <!-- Negative t branch -->
+
+  <text class="text" x="300" y="80">$y = 1/t$</text>
+</svg>
